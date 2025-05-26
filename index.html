@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kwaai Community Engagement & Vision Survey Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Visualization & Content Choices: 
+        - Survey Sections/Questions: HTML representations of questions (text, multiple choice, rank, scale, matrix, checkboxes, paragraph). Goal: Inform/Explore. Method: Dynamically shown/hidden divs.
+        - Navigation: Clickable sidebar links. Goal: Navigate. Method: JS to control content visibility.
+        - All textual content from the survey document, plus new projective/branding questions, will be used.
+    -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .question-item {
+            border-left: 4px solid #0284c7; /* sky-600 */
+        }
+        .fake-checkbox::before, .fake-radio::before {
+            content: '';
+            display: inline-block;
+            width: 1em;
+            height: 1em;
+            border: 1px solid #737373; /* neutral-500 */
+            margin-right: 0.5em;
+            vertical-align: middle;
+        }
+        .fake-checkbox::before {
+            border-radius: 0.125rem; /* rounded-sm */
+        }
+        .fake-radio::before {
+            border-radius: 9999px; /* rounded-full */
+        }
+        .rank-option::before {
+            content: counter(rank-item);
+            counter-increment: rank-item;
+            font-weight: bold;
+            color: #0369a1; /* sky-700 */
+            margin-right: 0.5em;
+            padding: 0.1em 0.4em;
+            border-radius: 0.25rem;
+            background-color: #e0f2fe; /* sky-100 */
+            border: 1px solid #7dd3fc; /* sky-300 */
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 0.5rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <aside class="w-full md:w-64 bg-sky-700 text-white p-6 space-y-4 md:sticky md:top-0 md:h-screen overflow-y-auto">
+            <h1 class="text-2xl font-bold">Kwaai Survey</h1>
+            <nav>
+                <ul class="space-y-2">
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="intro">Introduction</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section1">Section 1: Your Journey</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section2">Section 2: Expertise & Work Style</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section3">Section 3: Voice & Experience</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section4">Section 4: KwaaiNet Deep Dive</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section5">Section 5: Future & Incentives</a></li>
+                    <li><a href="#" class="block py-2 px-3 rounded-md hover:bg-sky-600 nav-link" data-section="section6">Section 6: Final Thoughts</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            <section id="intro" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Kwaai Community Engagement & Vision Survey</h2>
+                <div class="bg-white p-6 rounded-lg shadow space-y-4">
+                    <h3 class="text-2xl font-semibold text-sky-600">Introduction</h3>
+                    <p>Hello Kwaai Innovator!</p>
+                    <p>Thank you for being a part of the Kwaai community. We're on an exciting mission to democratize AI and build a future where technology empowers individuals. To do this effectively, we need <strong>your valuable insights and perspectives</strong>.</p>
+                    <p>This questionnaire will take approximately 25-30 minutes to complete. <strong>Your honest feedback</strong> will help us:</p>
+                    <ul class="list-disc list-inside ml-4 space-y-1">
+                        <li>Understand <strong>your</strong> skills, interests, and motivations.</li>
+                        <li>Identify challenges and opportunities within Kwaai that <strong>you</strong> see.</li>
+                        <li>Improve our onboarding, engagement, and contribution processes for <strong>you</strong>.</li>
+                        <li>Develop a fair and rewarding incentive system that benefits <strong>all members</strong>.</li>
+                        <li>Shape the strategic direction of Kwaai and its initiatives, including Oak Venture Studio, with <strong>your input</strong>.</li>
+                    </ul>
+                    <p><strong>Your input is crucial.</strong> The more detailed <strong>your feedback and proposals</strong>, the more effectively we can build a thriving ecosystem together. The information <strong>you provide</strong> will directly inform our strategies for monetization, resource allocation, and ensuring value flows back to <strong>our members and the community</strong>. We appreciate <strong>you</strong>!</p>
+                </div>
+            </section>
+
+            <section id="section1" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 1: Your Journey with Kwaai</h2>
+                <p class="text-md">This first section focuses on your personal connection to Kwaai, how you found us, and your current level of engagement. Understanding your journey helps us better support new and existing members.</p>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">1. What is your name?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">2. What is your primary email address?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer (with email validation)</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">3. How did you first hear about Kwaai?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>Kwaai's LinkedIn Page</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Knew Reza from the past</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Reza reached out on LinkedIn</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>A friend or colleague referral</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>News article or blog post</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Industry event or conference</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Academic institution</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Google Search</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">4. What are your motivations for being part of the Kwaai community? (Please sort from the highest priority to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = highest priority).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Passion for democratizing AI</li>
+                            <li class="rank-option">Interest in Personal AI (PAI) concepts</li>
+                            <li class="rank-option">Desire to contribute to open-source projects</li>
+                            <li class="rank-option">Opportunity to learn new skills (e.g., AI/ML, project management)</li>
+                            <li class="rank-option">Networking with professionals and enthusiasts in the AI field</li>
+                            <li class="rank-option">Interest in specific Kwaai projects (e.g., KwaaiNet, PAIOS)</li>
+                            <li class="rank-option">Exploring potential career or entrepreneurial opportunities</li>
+                            <li class="rank-option">Concern about AI monopolies, Data Surveillance and ethical implications</li>
+                            <li class="rank-option">Interest in being part of a community of like-minded professionals</li>
+                            <li class="rank-option">Exposure to the latest and greatest tech advancement news</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">5. What is your current level of involvement with Kwaai?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>Haven't been able to attend public meetings regularly recently</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Follow updates on Slack, attend public meetings regularly, haven't been able to contribute to workgroups</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Spend approx. 8 hours/month, participate in workgroups</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Spend more than 8 hours/month, contribute domain expertise</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Partner Representative (from a corporate or academic partner)</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>New Member (still exploring)</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">6. How many times have you attended Kwaai Friday public meetings in the last month?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>3-4 times</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>1-2 times</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Haven't been able to due to other priorities.</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">7. How many times have you attended Kwaai workgroup meetings in the last month?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>More than 5 times</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>3-4 times</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>1-2 times</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Haven't been able to due to other priorities.</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">8. How often did you check the Kwaai Slack server over the last month?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>A few times a day</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>At least once a day</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>A few times a week</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>At least once a week</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>At least once over the last month</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Haven't been able to due to other priorities.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section2" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 2: Your Expertise & How You Like to Work</h2>
+                <p class="text-md">This section delves into your skills, working style, and communication preferences. This information is vital for matching you with suitable opportunities and ensuring effective collaboration within the community.</p>
+                 <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">9. What are your skills or areas of expertise? (Please sort from the strongest to the least confident)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would indicate your strongest skills first, perhaps by ranking or selecting multiple and then ordering them.</p>
+                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Software Development (frontend)</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Software Development (backend)</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>AI/Machine Learning Development</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>DevOps/Infrastructure</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Cybersecurity</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Data Analysis & Visualization</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>UX/UI Design</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Product Management</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Project Management / Agile Methodologies</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Technical Writing / Documentation</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Marketing / Branding / Social Media</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Content Creation (Video, Graphics, Writing)</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Community Management / Moderation</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Event Organization</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Business Development / Sales</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Fundraising / Grant Writing</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Legal / Policy / Ethics</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Finance / Accounting</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Education / Training</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Art</div>
+                            <div class="flex items-center col-span-1 sm:col-span-2"><span class="fake-checkbox"></span>Research (please specify field if not AI/ML): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                            <div class="flex items-center col-span-1 sm:col-span-2"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">10. Which of the following best describes your personality type in a collaborative environment based on your past professional experiences? (Please sort from the strongest to the least confident)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most descriptive).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Leader/Initiator (Enjoy taking charge and guiding projects)</li>
+                            <li class="rank-option">Implementer/Doer (Focus on executing tasks and getting things done)</li>
+                            <li class="rank-option">Innovator/Idea Generator (Love brainstorming and coming up with new concepts)</li>
+                            <li class="rank-option">Analyst/Strategist (Prefer planning, researching, and problem-solving)</li>
+                            <li class="rank-option">Supporter/Team Player (Enjoy helping others and fostering a positive environment)</li>
+                            <li class="rank-option">Communicator/Networker (Skilled at connecting people and ideas)</li>
+                            <li class="rank-option">Detail-Oriented/Organizer (Focus on structure, processes, and quality)</li>
+                            <li class="rank-option">Observer</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">11. What are your preferred methods of communication for project collaboration? (Please sort from the most preferred to the least.)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most preferred).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Slack</li>
+                            <li class="rank-option">Email</li>
+                            <li class="rank-option">Video Calls</li>
+                            <li class="rank-option">Audio Calls</li>
+                            <li class="rank-option">Shared Documents (e.g., Google Docs, project management tools)</li>
+                            <li class="rank-option">In-person meetings (if applicable locally)</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">12. What are your preferred primary channels for receiving general Kwaai announcements and updates? (Please sort from the most preferred to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most preferred).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Email</li>
+                            <li class="rank-option">Slack</li>
+                            <li class="rank-option">Kwaai Website Updates</li>
+                            <li class="rank-option">LinkedIn Page</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section3" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 3: Shaping Kwaai's Voice & Your Experience</h2>
+                <p class="text-md">(Communications, Storytelling, Content, Onboarding, Branding)</p>
+                <p class="text-md">Your experience as a community member is paramount. This section gathers your feedback on our communication, storytelling, content, the onboarding process, and explores perceptions of Kwaai's character to help us improve and make your engagement with Kwaai more fulfilling and aligned with our collective identity.</p>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">13. On a scale of 1 to 5, how would you rate your overall onboarding experience with Kwaai? (1 = Very Poor, 3 = Neutral, 5 = Excellent)</p>
+                        <div class="mt-2 flex space-x-2">
+                            <button class="border p-2 rounded-md hover:bg-sky-100">1</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">2</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">3</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">4</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">5</button>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Linear Scale 1-5)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">14. What were the biggest challenges or points of friction you experienced during your onboarding (or in getting started with contributing)? What was the ONE biggest hurdle, if you had to pick?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">15. What aspects of the onboarding process (if any) did you find helpful or positive?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">16. After your initial introduction to Kwaai, what were the first 1-2 things you wished you knew or had access to, to help you get involved more quickly?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>List of active projects and their current status</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Clear contact person or guide for each workgroup/initiative</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Technical setup guides or resources for specific tools/platforms</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>An overview of the different ways to contribute (time, skills, resources)</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>A "who's who" in the community and their areas of expertise</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>A roadmap of upcoming priorities and opportunities</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Select up to 2)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">17. How clear is Kwaai's overall mission and the goals of its different initiatives (e.g., KwaaiNet, PAIOS, Policy Workgroups) to you?</p>
+                         <div class="mt-2 flex space-x-2">
+                            <button class="border p-2 rounded-md hover:bg-sky-100">1 (Not at all clear)</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">2</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">3</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">4</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">5 (Very clear)</button>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Linear Scale 1-5)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">18. To help us communicate better, please indicate how much you agree with the following statements:</p>
+                        <table class="w-full mt-2 matrix-table">
+                            <thead>
+                                <tr>
+                                    <th>Statement</th>
+                                    <th>Strongly Disagree</th>
+                                    <th>Disagree</th>
+                                    <th>Neutral</th>
+                                    <th>Agree</th>
+                                    <th>Strongly Agree</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Kwaai's current communication is clear and easy to understand.</td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>I feel well-informed about Kwaai's progress and key developments.</td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>I know where to find information when I have questions about Kwaai.</td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>The weekly community meetings are a valuable use of my time.</td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                    <td class="text-center"><span class="fake-radio"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Matrix/Likert Scale)</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">19. If Kwaai were an animal, what animal would it be and why?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                        <p class="text-xs text-slate-500 mt-1 italic">Purpose: This is a projective technique to uncover underlying perceptions about Kwaai's characteristics (e.g., wise owl, busy bee, powerful lion, collaborative ant). The "why" is crucial.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">20. When you think about the idea of 'Personal AI' being your helpful assistant or companion, what kind of personality or character traits would you find most appealing or trustworthy? (Select up to 3)</p>
+                        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Knowledgeable & Wise</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Friendly & Approachable</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Innovative & Forward-thinking</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Reliable & Dependable</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Playful & Creative</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Efficient & Organized</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Empathetic & Understanding</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Protective & Secure</div>
+                            <div class="flex items-center col-span-1 sm:col-span-2"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 italic">Purpose: Helps understand desired brand personality attributes for the "face" of Kwaai, especially relating to its core offering of Personal AI.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">21. Many successful tech brands have a memorable mascot or character (e.g., Linux's Tux the Penguin, Duolingo's Duo the Owl, GitHub's Octocat). If Kwaai were to have a 'fun face' or symbol to represent its community and mission, what kind of character or image comes to mind? (Be as creative as you like!)</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                        <p class="text-xs text-slate-500 mt-1 italic">Purpose: Directly solicits ideas for a mascot or symbolic representation. Encourages creative thinking from the community.</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">22. What feeling or idea do you think a Kwaai mascot or symbol should primarily evoke? (Select one)</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>Intelligence & Knowledge</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Friendliness & Helpfulness</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Innovation & Progress</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Trust & Security</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Community & Collaboration</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Empowerment & Freedom</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Fun & Engagement</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1 italic">Purpose: Narrows down the core emotional or conceptual message the mascot should convey, which links to branding.</p>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">23. Are there any existing fictional characters (from books, movies, games, etc.) or historical figures that you feel embody some of the spirit or values of Kwaai? If so, who and why? (Optional)</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                        <p class="text-xs text-slate-500 mt-1 italic">Purpose: Can provide archetypes or conceptual starting points for a mascot's personality or design.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">24. When you think about organizations or projects you admire, what makes their communication stand out to you? (Select all that apply)</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They are transparent and honest.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They tell compelling stories.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They provide clear and concise information.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They are responsive and interactive.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They share regular updates and progress.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Their mission and values are clearly reflected in their communication.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They use language that is easy to understand (avoids jargon).</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>They use visuals effectively.</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">25. What kind of information or content about Kwaai and its projects (e.g., KwaaiNet, PAIOS) would be most valuable or interesting to you? (Select all that apply)</p>
+                         <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Technical deep dives and tutorials</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Use cases and examples of Personal AI in action</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Updates on research breakthroughs</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Discussions on AI ethics and policy</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Community member spotlights and success stories</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Information on how to contribute to specific projects</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>News about partnerships or funding</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Visionary content about the future of AI</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">26. What kind of stories or content about Kwaai would you find most engaging or inspiring? (Please sort from the most engaging to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most engaging).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Success stories of how Kwaai's technology is being used (even hypothetically for now).</li>
+                            <li class="rank-option">The "origin story" and vision behind Kwaai.</li>
+                            <li class="rank-option">Profiles of community members and their contributions.</li>
+                            <li class="rank-option">Deep dives into the problems Kwaai is solving (e.g., AI monopolization).</li>
+                            <li class="rank-option">Explanations of complex AI concepts in simple terms.</li>
+                            <li class="rank-option">The future vision for Personal AI and its impact on society.</li>
+                            <li class="rank-option">Behind-the-scenes looks at project development.</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">27. How do you prefer to learn about new features or projects within Kwaai? (Select your top 2)</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Detailed blog posts or articles</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Short video demonstrations</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Interactive webinars or Q&A sessions</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Step-by-step tutorials or guides</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Updates in the weekly community call</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Discussions in Slack channels</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Formal documentation</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                         <p class="text-sm text-slate-500 mt-2 italic">(Select up to 2)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">28. When learning about new technology or projects, what makes a message or explanation particularly clear and compelling to you?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph text</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section4" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 4: Deep Dive: KwaaiNet - Needs & Value</h2>
+                <p class="text-md">(KwaaiNet Pricing, User Persona Development for KwaaiNet)</p>
+                <p class="text-md">This section focuses specifically on KwaaiNet, our decentralized AI infrastructure project. Your input will help us understand your needs, perceived value, and preferences regarding potential features and pricing models.</p>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">29. When you think about running AI models or managing data for AI projects, what are your biggest challenges or frustrations with current solutions (e.g., centralized cloud providers, local limitations)? (Please rank from the biggest challenge to the smallest)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = biggest challenge).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Cost of computation/storage</li>
+                            <li class="rank-option">Data privacy and security concerns</li>
+                            <li class="rank-option">Vendor lock-in / lack of control</li>
+                            <li class="rank-option">Complexity of setting up and managing infrastructure</li>
+                            <li class="rank-option">Limited access to specialized AI hardware</li>
+                            <li class="rank-option">Censorship or access restrictions</li>
+                            <li class="rank-option">Difficulty in collaborating on sensitive data</li>
+                            <li class="rank-option">Scalability issues with personal projects</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">30. How appealing are the following potential benefits of a decentralized AI infrastructure like KwaaiNet to you? (Please rank from the most appealing to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most appealing).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Lower cost for AI computation/storage</li>
+                            <li class="rank-option">Enhanced data privacy and control</li>
+                            <li class="rank-option">Increased censorship resistance</li>
+                            <li class="rank-option">Ability to contribute your own compute resources for rewards/credits</li>
+                            <li class="rank-option">Supporting a community-owned and operated infrastructure</li>
+                            <li class="rank-option">Easier access to distributed AI processing power</li>
+                            <li class="rank-option">Greater transparency in AI operations</li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">31. If you were to use or contribute to a decentralized AI network like KwaaiNet, what would be your primary interest? (Select one)</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>Running my own AI models or applications</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Contributing my computer's resources (CPU/GPU/storage) to the network</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Developing new applications or services on top of the network</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Accessing specific AI models or services offered by others on the network</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Learning about decentralized AI technologies</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Supporting the mission of democratizing AI</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">32. What types of AI applications or tasks would you be most interested in running or seeing supported on KwaaiNet? (Please sort from the most interested to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most interested).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Training smaller custom AI models</li>
+                            <li class="rank-option">Running inference for AI models (e.g., language models, image generation)</li>
+                            <li class="rank-option">Decentralized data storage and management</li>
+                            <li class="rank-option">Privacy-preserving data analysis</li>
+                            <li class="rank-option">Collaborative AI model development</li>
+                            <li class="rank-option">Hosting Personal AI Agents (PAIOS related)</li>
+                            <li class="rank-option">Scientific research or simulations</li>
+                            <li class="rank-option">Content generation (text, images, audio)</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">33. If KwaaiNet offered a simple way to run a node and contribute to a decentralized AI network, how likely would you be to try it?</p>
+                        <div class="mt-2 flex space-x-2">
+                            <button class="border p-2 rounded-md hover:bg-sky-100">1 (Very Unlikely)</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">2</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">3</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">4</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">5 (Very Likely)</button>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Linear Scale 1-5)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">34. What would make you more likely to try it?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">35. For developers: If KwaaiNet provided robust APIs and SDKs for building decentralized AI applications, what would be the most important factors for you to consider adopting it? (Please sort from the most important to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most important).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Ease of integration with existing tools/languages</li>
+                            <li class="rank-option">Comprehensive and clear documentation</li>
+                            <li class="rank-option">Active developer community support</li>
+                            <li class="rank-option">Low transaction costs or fees</li>
+                            <li class="rank-option">Performance and scalability of the underlying network</li>
+                            <li class="rank-option">Strong security and privacy guarantees</li>
+                            <li class="rank-option">Availability of pre-trained models or useful AI services on the network</li>
+                            <li class="rank-option">Clear path to monetization for applications built on KwaaiNet</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">36. If KwaaiNet offered different tiers of service or access (some potentially paid, to support Kwaai's non-profit mission), which of the following aspects would be MOST important in justifying its value to you or your organization? (Please rank your top 3):</p>
+                         <p class="text-sm text-slate-600 mt-1 italic">Instruction: Select your top 3 most important aspects from the list below. In an actual survey, you might check boxes and then number your top 3.</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Significantly lower cost than centralized cloud AI services</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Unmatched data privacy and user control features</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Superior performance or unique computational capabilities</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Ease of use, developer-friendly tools, and seamless integration</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Robust security and reliability of the network</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Access to a unique and active community of AI developers/users</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Strong ethical guarantees and transparent operations</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Clear and responsive support and documentation</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">37. Consider the following potential features/benefits of KwaaiNet. For each, indicate how valuable it would be to you, and if you would consider a paid tier or contribution model to access it:</p>
+                        <table class="w-full mt-2 matrix-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-1/2">Feature/Benefit</th>
+                                    <th class="w-1/4 text-center">Value (Low, Med, High)</th>
+                                    <th class="w-1/4 text-center">Willingness to Pay/Contribute (No, Maybe, Yes)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Access to highly specialized AI models on the network</td>
+                                    <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                                <tr>
+                                    <td>Guaranteed uptime/SLA for critical applications</td>
+                                    <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                                <tr>
+                                    <td>Advanced analytics on network usage/performance</td>
+                                    <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                                <tr>
+                                    <td>Dedicated support channels</td>
+                                    <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                                <tr>
+                                    <td>Increased storage capacity on the decentralized network</td>
+                                    <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                                <tr>
+                                    <td>Priority access to new compute resources</td>
+                                     <td class="text-center"><span class="fake-radio"></span> L <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> H</td>
+                                    <td class="text-center"><span class="fake-radio"></span> N <span class="fake-radio ml-2"></span> M <span class="fake-radio ml-2"></span> Y</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                         <p class="text-sm text-slate-500 mt-2 italic">(Matrix Question)</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">38. Describe a specific project or task (current or imagined) where you could see yourself or your organization benefiting from using a decentralized AI infrastructure like KwaaiNet. What would you be trying to achieve?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">39. What problems do you believe KwaaiNet could solve for developers that are not currently being well-addressed by existing cloud providers or other decentralized platforms?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">40. If KwaaiNet successfully delivers on its promise of decentralized, private, and community-powered AI infrastructure, what tangible impact could this have on your work or projects? (e.g., cost savings, new capabilities, ability to build new types of applications)</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">41. What kind of message or phrase would best capture the unique value of a community-powered, decentralized AI network like KwaaiNet for you?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short answer text</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section5" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 5: Building Our Future: Priorities & Incentives</h2>
+                <p class="text-md">(OKR Setting, Broader Communications, Incentives/Recognition)</p>
+                <p class="text-md">This section seeks your input on Kwaai's strategic priorities, how we can effectively communicate our progress, and what forms of recognition and incentives would be most meaningful to you as a contributor.</p>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">42. In your own words, what is the single most important problem Kwaai is trying to solve?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">43. If you were to describe Kwaai to a friend or colleague in one sentence, what would you say?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">44. What three words first come to mind when you think of Kwaai?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer (encourage single words)</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">45. How do you rank the values of the Kwaai ecosystem? (Please sort from the most important to you to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most important).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Democratization (of AI)</li>
+                            <li class="rank-option">Personal Control/Agency/Sovereignty</li>
+                            <li class="rank-option">Openness & Transparency</li>
+                            <li class="rank-option">Collaboration & Community</li>
+                            <li class="rank-option">Ethical AI & Responsible Development</li>
+                            <li class="rank-option">Innovation & Cutting-Edge Research</li>
+                            <li class="rank-option">Purposeful Action ("Be Purposeful")</li>
+                            <li class="rank-option">Tenacity ("Be Tenacious")</li>
+                            <li class="rank-option">Truthfulness/Authenticity ("Be True")</li>
+                            <li class="rank-option">Passion ("Be Passionate")</li>
+                            <li class="rank-option">Curiosity ("Be Curious")</li>
+                            <li class="rank-option">Ambition/Striving ("Do the Impossible")</li>
+                            <li class="rank-option">Privacy</li>
+                            <li class="rank-option">Empowerment</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">46. To ensure Kwaai makes the biggest impact in the next 12 months, which ONE of these broad objectives do you think should be our absolute top priority?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-radio"></span>Rapidly growing and activating our global community of contributors.</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Achieving significant technical milestones and adoption for KwaaiNet/PAIOS.</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Establishing Kwaai as a leading voice in AI ethics and policy.</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Securing major funding/partnerships to ensure long-term sustainability.</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Successfully launching the first ventures through Oak Venture Studio.</div>
+                            <div class="flex items-center"><span class="fake-radio"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Select ONE)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">47. And what would be a key result or measurable outcome that would show we're succeeding in this priority?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">48. If you are part of a Workgroup (please specify which one: <span class="p-1 border-b border-slate-300 w-1/2 inline-block"></span>), what is the single most important outcome your workgroup should achieve in the next 3-6 months to contribute to Kwaai's overall mission?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">49. How effective are the current Workgroups in achieving their goals and facilitating collaboration?</p>
+                        <div class="mt-2 flex space-x-2">
+                            <button class="border p-2 rounded-md hover:bg-sky-100">1 (Not at all effective)</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">2</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">3</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">4</button>
+                            <button class="border p-2 rounded-md hover:bg-sky-100">5 (Very effective)</button>
+                        </div>
+                        <div class="mt-2 flex items-center"><span class="fake-radio"></span>Not applicable / I'm not involved in any workgroups</div>
+                        <p class="text-sm text-slate-500 mt-2 italic">(Linear Scale 1-5)</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">50. What suggestions do you have for improving the structure or functioning of Workgroups that you have explored? (e.g., leadership, meeting time, meeting frequency, goal setting, communication)</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">51. When Kwaai has important news or achievements to share (e.g., a major KwaaiNet update, a new partnership), what are the most effective ways for us to reach people outside our immediate community who should know about it?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Press releases to tech media</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Articles on platforms like Medium, HackerNoon</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Targeted outreach on LinkedIn</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Engaging with relevant influencers on X/Twitter</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Presentations at industry conferences</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Academic publications</div>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">52. What types of incentives or recognition would motivate you to contribute more actively or take on leadership responsibilities within Kwaai? (Please sort from the most motivating to the least.)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most motivating).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Appropriate title and public acknowledgement</li>
+                            <li class="rank-option">Digital badges or certifications</li>
+                            <li class="rank-option">Opportunities to lead or co-lead projects/workgroups</li>
+                            <li class="rank-option">Mentorship from experienced members</li>
+                            <li class="rank-option">Access to exclusive training or resources</li>
+                            <li class="rank-option">Early access to new Kwaai technologies</li>
+                            <li class="rank-option">Discounted/complimentary AI services by partners</li>
+                            <li class="rank-option">Kwaai-branded merchandise (swag)</li>
+                            <li class="rank-option">Increased voting rights or influence</li>
+                            <li class="rank-option">Stipends or grants (when available)</li>
+                            <li class="rank-option">Profit-sharing/equity in future startups</li>
+                            <li class="rank-option">Paid consulting opportunities</li>
+                            <li class="rank-option">Access to seasoned professionals for mentorship</li>
+                            <li class="rank-option">Kwaai utility token (tied to KwaaiNet)</li>
+                            <li class="rank-option">Funding for ideas/startups aligned with Kwaai</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">53. Do you have any innovative ideas for how Kwaai could reward or recognize contributions in a decentralized, community-driven way?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section6" class="content-section space-y-6">
+                <h2 class="text-3xl font-semibold text-sky-700 border-b-2 border-sky-500 pb-2">Section 6: Further Opportunities & Final Thoughts</h2>
+                <p class="text-md">This final section explores your broader aspirations related to AI, your views on Kwaai's unique position, and any interest in future opportunities, including those related to Oak Venture Studio. We also invite any closing thoughts you might have.</p>
+                <div class="space-y-8">
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">54. When you think about the future of AI, what are your biggest hopes or aspirations?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">55. Conversely, what are your biggest concerns or fears about the future of AI?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">56. If Kwaai could deliver one ultimate benefit or outcome for you personally (or for your organization, if applicable), what would that be?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic">Short Answer</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">57. Thinking about your current work or personal projects involving information, learning, or AI, what specific tasks or 'jobs' are you trying to get done where you feel current tools or methods are lacking?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">58. What are the biggest frustrations or inefficiencies you face when trying to accomplish these tasks currently?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">59. When looking for solutions or communities related to AI, data privacy, or decentralized technology, where do you typically look for information or alternatives? (Please rank from most frequently used to the least)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most frequently used).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Specific tech forums (e.g., Stack Overflow, Reddit)</li>
+                            <li class="rank-option">GitHub or open-source project directories</li>
+                            <li class="rank-option">Tech news websites or blogs</li>
+                            <li class="rank-option">Academic papers or university research groups</li>
+                            <li class="rank-option">Recommendations from peers/colleagues</li>
+                            <li class="rank-option">Social media (LinkedIn, X, etc.)</li>
+                            <li class="rank-option">Corporate offerings from Big Tech</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">60. Are there any other projects, tools, or organizations that you see as similar to Kwaai or working on comparable challenges? If so, what are they, and what makes Kwaai different in your eyes?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">61. What do you believe makes Kwaai unique or different from other AI projects or organizations you know?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">62. If you have an idea for an AI-driven startup, what kind of support from a venture studio (like Oak Venture Studio) would be most valuable to you? (Please rank from most valuable to the least.)</p>
+                        <p class="text-sm text-slate-600 mt-1 italic">Instruction: Review the options below. In an actual survey, you would rank these by assigning a number or dragging them into your preferred order (e.g., 1 = most valuable).</p>
+                        <ul class="mt-2 space-y-2" style="counter-reset: rank-item;">
+                            <li class="rank-option">Funding (pre-seed/seed)</li>
+                            <li class="rank-option">Technical expertise and development resources</li>
+                            <li class="rank-option">Business strategy and mentorship</li>
+                            <li class="rank-option">Access to a network of potential users or partners</li>
+                            <li class="rank-option">Marketing and go-to-market support</li>
+                            <li class="rank-option">Legal and operational setup</li>
+                            <li class="rank-option">Help with team building</li>
+                            <li class="rank-option">Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">63. What are the biggest barriers or concerns you would have about starting or joining an early-stage AI venture?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">64. Kwaai is exploring various avenues for growth and impact. Which of the following opportunities would you be interested in learning more about or potentially participating in? (Select all that apply)</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Investing in startups emerging from the Kwaai ecosystem</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Contributing your skills to startups incubated by Oak Venture Studio</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Referring potential donors to Kwaai</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Referring potential partners or sponsors to Kwaai</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Offering consulting services through a Kwaai-affiliated network</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Leading or co-leading a new workgroup or initiative</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Mentoring members</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Participating in hackathons or collaborative development sprints</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Leading a local Kwaai chapter in your city/country</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>None of the above at this time</li>
+                            <div class="flex items-center"><span class="fake-checkbox"></span>Other (please specify): <span class="ml-2 p-1 border-b border-slate-300 w-1/2 inline-block"></span></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow question-item">
+                        <p class="font-semibold text-lg text-sky-700">65. Is there anything else you'd like to share that could help us make Kwaai a more effective, engaging, and impactful organization? Any brilliant ideas you're holding back?</p>
+                        <div class="mt-2 p-3 border border-slate-300 rounded-md bg-slate-50 text-slate-500 italic h-24">Paragraph Text</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow mt-8">
+                        <p class="text-xl font-semibold text-center text-sky-700">Thank you for your time and thoughtful responses! Your contribution is invaluable to the future of Kwaai.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const sectionActivationHistory = [];
+
+            function setActiveSection(sectionId) {
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const activeSection = document.getElementById(sectionId);
+                if (activeSection) {
+                    activeSection.classList.add('active');
+                    window.scrollTo(0, 0); 
+                    
+                    navLinks.forEach(link => {
+                        link.classList.remove('bg-sky-800', 'font-semibold');
+                        if (link.dataset.section === sectionId) {
+                            link.classList.add('bg-sky-800', 'font-semibold');
+                        }
+                    });
+
+                    if (sectionActivationHistory[sectionActivationHistory.length -1] !== sectionId) {
+                         sectionActivationHistory.push(sectionId);
+                    }
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const sectionId = this.dataset.section;
+                    setActiveSection(sectionId);
+                });
+            });
+            
+            setActiveSection('intro'); // Set 'intro' as the default active section
+        });
+    </script>
+</body>
+</html>

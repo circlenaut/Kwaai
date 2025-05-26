@@ -1,0 +1,17 @@
+{
+  "name": "kwaai-survey-app",
+  "version": "1.0.0",
+  "description": "Kwaai Community Survey Application",
+  "main": "index.html",
+  "scripts": {
+    "dev": "netlify dev",
+    "build": "echo 'No build step required'",
+    "deploy": "netlify deploy --prod"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  },
+  "keywords": ["survey", "netlify", "forms"],
+  "author": "Kwaai",
+  "license": "MIT"
+}
